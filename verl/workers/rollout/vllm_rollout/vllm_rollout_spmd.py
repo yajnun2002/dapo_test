@@ -212,6 +212,8 @@ class vLLMRollout(BaseRollout):
 
         do_sample = prompts.meta_info.get('do_sample', True)
         is_validate = prompts.meta_info.get('validate', False)
+        num_return_sequences = prompts.meta_info.get('num_return_sequences', 1)
+
         if not do_sample:
             kwargs = {
                 'best_of': 1,
@@ -227,7 +229,7 @@ class vLLMRollout(BaseRollout):
                 'top_k': self.config.val_kwargs.top_k,
                 'top_p': self.config.val_kwargs.top_p,
                 'temperature': self.config.val_kwargs.temperature,
-                'n': 1,  # if validate, already repeat in ray_trainer
+                'n': num_return_sequences,  # if validate, already repeat in ray_trainer
             }
 
         # users can customize different sampling_params at different run
